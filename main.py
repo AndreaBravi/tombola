@@ -110,6 +110,9 @@ class HTMLGenerator(object):
 		self.boardWidth = 84
 		self.offset = offset
 
+	def addNumber(self, name):
+		return '<h1><center>&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;</center></h1>' % (name)
+
 	def addFigure(self, name, width):
 		return '<img src="images/%d.jpg" alt="" style="width:%dpx; height:auto;"></img>' % (name, width)
 
@@ -145,9 +148,23 @@ class HTMLGenerator(object):
 	  				html += '</tr>\n'
 	  			else:
 	  				html += '</tr>\n<tr>\n'
-	  		html += '<td>%s</td>\n' % (self.addFigure(card.item(n), self.boardWidth))
+	  		html += '<td>%s</td>\n' % (self.addFigure(card.item(n), self.boardWidth))	  		
 		html += '</table>\n<br>\n'
 		return html	
+
+	def addNumbers(self, card):
+		html = '<table border="2">\n'
+		for n in range(33):
+			if n % 11 == 0:
+				if n == 0:
+	  				html += '<tr>\n'
+	  			elif n == 32:
+	  				html += '</tr>\n'
+	  			else:
+	  				html += '</tr>\n<tr>\n'
+	  		html += '<td>%s</td>\n' % (self.addNumber(card.item(n)))	  		
+		html += '</table>\n<br>\n'
+		return html			
 
 	def printBoard(self, cards):
 		body = '<center><h3 style="padding-left:200px;">Tombola St. Peter </h3></center>'
@@ -156,6 +173,12 @@ class HTMLGenerator(object):
 			if (n + 1) % 2 == 0 and n > 0:
 				body += '\n<p style="page-break-after:always;"></p>\n'
 		self.write(body, 'board')
+
+	def printNumbers(self, cards):
+			body = '<center><h3 style="padding-left:200px;">Tombola St. Peter </h3></center>'
+			for n, card in enumerate(cards):
+				body += self.addNumbers(card)
+			self.write(body, 'numbers')
 
 	def readTemplate(self):
 		with open('template.html', 'r') as htmlFile:
@@ -198,3 +221,6 @@ for n in range(3):
 	cards += [card]
 
 hg.printBoard(cards)
+
+# ----------- Generating drawing numbers
+hg.printNumbers(cards)
