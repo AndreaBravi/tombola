@@ -116,7 +116,7 @@ class HTMLGenerator(object):
 	def addFigure(self, name, width):
 		return '<img src="images/%d.jpg" alt="" style="width:%dpx; height:auto;"></img>' % (name, width)
 
-	def addCard(self, n, offset, tot, card):
+	def addCard(self, n, tot, card):
 		html = 'Tombola St. Peter - %d/%d<br><table border="2">\n' % (n + 1 + self.offset, tot + self.offset)
 		for n in range(27):
 			if n % 9 == 0:
@@ -133,7 +133,7 @@ class HTMLGenerator(object):
 	def printCards(self, cards):
 		body = ""
 		for n, card in enumerate(cards):
-			body += self.addCard(n, offset, nCards, card)
+			body += self.addCard(n, nCards, card)
 			if (n + 1) % 4 == 0 and n > 0:
 				body += '\n<p style="page-break-after:always;"></p>\n'
 		self.write(body, 'cards')
@@ -192,11 +192,11 @@ class HTMLGenerator(object):
 # ----------- Setup
 
 # Parameters
-nCards = 96
-offset = 96
+nCards = 150
+cardsOffset = 0 # Used to offset card count
 
 cg = CardGenerator()
-hg = HTMLGenerator(offset)
+hg = HTMLGenerator(cardsOffset)
 
 # ----------- Generating cards
 
